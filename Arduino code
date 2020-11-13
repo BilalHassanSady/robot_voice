@@ -1,0 +1,104 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial voice(2,3);
+
+#define IN1 9//controll motor pins
+#define IN2 8
+#define IN3 7
+#define IN4 6
+#define ENA 10
+#define ENB 5
+
+
+byte com = 0;
+
+
+void setup() {
+// for voice recognithion module
+voice.begin(9600);
+
+voice.write(0xAA);
+
+voice.write(0x37);
+
+delay(1000);
+
+voice.write(0xAA);
+
+voice.write(0x21);
+//end of voice reconithation module
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  digitalWrite(ENA, 1);
+  pinMode(ENB, 1);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+
+void loop() {
+
+  while(voice.available()) {
+  com = voice.read();
+  switch(com) {
+      case 0x11:  
+       forward();
+       break;
+      case 0x12:  
+       reverse(); 
+       break;
+      case 0x13:  
+       right();
+       break;
+      case 0x14: 
+       left();
+       break;
+      case 0x15:  
+       stoprobot();
+       break;
+        } }}
+
+void forward()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void reverse()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+void left()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void right()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+
+void stoprobot()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
